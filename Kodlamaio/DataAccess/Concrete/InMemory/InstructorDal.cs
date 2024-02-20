@@ -29,9 +29,21 @@ public class InstructorDal : IInstructorDal
         _instructors.Remove(instructorToDelete);
     }
 
-    public List<Instructor> GetAll()
+    public Instructor Get(Expression<Func<Instructor, bool>> filter)
     {
-        return _instructors;
+        return _instructors.SingleOrDefault(filter.Compile());
+    }
+
+    public List<Instructor> GetAll(Expression<Func<Instructor, bool>> filter = null)
+    {
+        if (filter != null)
+        {
+            return _instructors;
+        }
+        else
+        {
+            return _instructors.Where(filter.Compile()).ToList();
+        };
     }
 
     public void Update(Instructor entity)

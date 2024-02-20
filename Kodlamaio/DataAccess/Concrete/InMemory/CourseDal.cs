@@ -31,26 +31,28 @@ public class CourseDal : ICourseDal
         _courses.Remove(courseToDelete);
     }
 
-    public List<Course> GetAll()
-    {
-        return _courses;
-    }
-
-    public List<Course> GetByCategoryId(int categoryId)
-    {
-        return _courses.Where(c => c.CategoryId == categoryId).ToList();
-    }
-
-    public List<Course> GetByInsructorId(int insructorId)
-    {
-        return _courses.Where(c => c.InstructorId == insructorId).ToList();
-    }
-
     public void Update(Course entity)
     {
         Course courseToUpdate = _courses.SingleOrDefault(c => c.CourseId == entity.CourseId);
         courseToUpdate.CategoryId = entity.CategoryId;
         courseToUpdate.InstructorId = entity.InstructorId;
         courseToUpdate.Price = entity.Price;
+    }
+
+    public Course Get(Expression<Func<Course, bool>> filter)
+    {
+        return _courses.SingleOrDefault(filter.Compile());
+    }
+
+    public List<Course> GetAll(Expression<Func<Course, bool>> filter=null)
+    {
+        if (filter == null)
+        {
+            return _courses;
+        }
+        else
+        {
+            return _courses.Where(filter.Compile()).ToList();
+        }
     }
 }

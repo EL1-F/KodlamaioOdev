@@ -29,9 +29,21 @@ public class CategoryDal : ICategoryDal
         _categories.Remove(categoryToDelete);
     }
 
-    public List<Category> GetAll()
+    public Category Get(Expression<Func<Category, bool>> filter)
     {
-        return _categories;
+        return _categories.SingleOrDefault(filter.Compile());
+    }
+
+    public List<Category> GetAll(Expression<Func<Category, bool>> filter = null)
+    {
+        if (filter == null)
+        {
+            return _categories;
+        }
+        else
+        {
+            return _categories.Where(filter.Compile()).ToList();
+        }
     }
 
     public void Update(Category entity)

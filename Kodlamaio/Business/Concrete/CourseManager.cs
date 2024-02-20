@@ -33,12 +33,12 @@ public class CourseManager : ICourseService
 
     public List<Course> GetByCategoryId(int categoryId)
     {
-        return _courseDal.GetByCategoryId(categoryId);
+        return _courseDal.GetAll(c => c.InstructorId == categoryId);
     }
 
     public List<Course> GetByInsructorId(int insructorId)
     {
-        return _courseDal.GetByInsructorId(insructorId);
+        return _courseDal.GetAll(c => c.InstructorId == insructorId);
     }
 
     public void Update(Course course)
